@@ -718,7 +718,7 @@
     width: 100%;
     max-width: 430px;
 
-    transition: all .3s ease;
+    transition: all .5s ease;
 }
 
 .footer.active{
