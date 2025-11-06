@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: flex-end;
     padding-bottom: 30px;
+    max-height: 523px;
 }
 
 .girl-1 {
@@ -27,6 +28,7 @@
     position: absolute;
     right: 20px;
     top: 120px;
+    z-index: 5;
 }
 
 .header-time {
