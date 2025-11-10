@@ -265,9 +265,23 @@
     background: rgba(51, 179, 171, 0.3);
     border: 1px solid rgb(160, 160, 160);
     position: relative;
+    padding: 20px;
     z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.who-info-item{
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
 }
 
+.who-info-item-check{
+    font-size: 20px;
+    padding-right: 10px;
+    color: #ff0582;
+}
 
 
 .about {
@@ -498,6 +512,8 @@
 }
 
 .poster {
+    width: 100%;
+    max-width: 400px;
     border-radius: 16px;
     border: 2px solid #fff;
 }

@@ -32,56 +32,63 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// --------------------------
+// ТАЙМЕР, ЩО ЙДЕ В ОБИДВА БОКИ
+// --------------------------
+
 document.addEventListener('DOMContentLoaded', () => {
-    const timer = document.querySelector('.footer-timer');
-    const values = timer.querySelectorAll('.footer-timer-value');
+  const timer = document.querySelector('.footer-timer');
+  const values = timer.querySelectorAll('.footer-timer-value');
 
-    const TOTAL_TIME = 24 * 60 * 60; // 24 години у секундах
-    const STORAGE_KEY = 'timerEndTime';
+  const TOTAL_TIME = 24 * 60 * 60; // 24 години у секундах
+  const STORAGE_KEY = 'timerStartTime';
 
-    // Отримуємо кінець таймера з localStorage або створюємо новий
-    let endTime = localStorage.getItem(STORAGE_KEY);
+  // Зберігаємо момент початку, а не кінець
+  let startTime = localStorage.getItem(STORAGE_KEY);
 
-    if (!endTime) {
-        endTime = Date.now() + TOTAL_TIME * 1000; // новий відлік
-        localStorage.setItem(STORAGE_KEY, endTime);
-    } else {
-        endTime = parseInt(endTime, 10);
+  if (!startTime) {
+    startTime = Date.now();
+    localStorage.setItem(STORAGE_KEY, startTime);
+  } else {
+    startTime = parseInt(startTime, 10);
+  }
+
+  function updateTimer() {
+    const now = Date.now();
+    const elapsed = Math.floor((now - startTime) / 1000);
+    let remaining = TOTAL_TIME - elapsed;
+
+    // Якщо ще не дійшло до нуля — йде відлік вниз
+    if (remaining >= 0) {
+      const hours = Math.floor(remaining / 3600);
+      const minutes = Math.floor((remaining % 3600) / 60);
+      const seconds = remaining % 60;
+
+      values[0].textContent = String(hours).padStart(2, '0');
+      values[1].textContent = String(minutes).padStart(2, '0');
+      values[2].textContent = String(seconds).padStart(2, '0');
+    } 
+    // Якщо пройшло більше часу — починаємо рахувати вгору
+    else {
+      const over = Math.abs(remaining);
+      const hours = Math.floor(over / 3600);
+      const minutes = Math.floor((over % 3600) / 60);
+      const seconds = over % 60;
+
+      values[0].textContent = `+${String(hours).padStart(2, '0')}`;
+      values[1].textContent = String(minutes).padStart(2, '0');
+      values[2].textContent = String(seconds).padStart(2, '0');
     }
+  }
 
-    // 💡 ВИПРАВЛЕННЯ: Оголошення змінної 'interval' на початку
-    let interval; 
-
-    function updateTimer() {
-        const now = Date.now();
-        let remaining = Math.floor((endTime - now) / 1000);
-
-        if (remaining <= 0) {
-            // Тепер 'interval' існує і може бути очищений
-            clearInterval(interval); 
-            localStorage.removeItem(STORAGE_KEY);
-            values[0].textContent = '00';
-            values[1].textContent = '00';
-            values[2].textContent = '00';
-            return;
-        }
-
-        const hours = Math.floor(remaining / 3600);
-        const minutes = Math.floor((remaining % 3600) / 60);
-        const seconds = remaining % 60;
-
-        values[0].textContent = String(hours).padStart(2, '0');
-        values[1].textContent = String(minutes).padStart(2, '0');
-        values[2].textContent = String(seconds).padStart(2, '0');
-    }
-
-    // Перший запуск для негайного оновлення
-    updateTimer(); 
-
-    // 💡 ВИПРАВЛЕННЯ: Присвоєння значення існуючій змінній
-    interval = setInterval(updateTimer, 1000); 
+  updateTimer();
+  setInterval(updateTimer, 1000);
 });
 
+
+// --------------------------
+// ДРУГИЙ ТАЙМЕР (що йде в обидва боки)
+// --------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
   const timer = document.querySelector('.what-content-time');
@@ -89,36 +96,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const values = timer.querySelectorAll('.what-content-time-item-title');
   const TOTAL_TIME = 24 * 60 * 60; // 24 години у секундах
-  const STORAGE_KEY = 'whatContentTimerEndTime';
+  const STORAGE_KEY = 'whatContentTimerStartTime';
 
-  let endTime = localStorage.getItem(STORAGE_KEY);
-  if (!endTime || Date.now() > endTime) {
-    endTime = Date.now() + TOTAL_TIME * 1000;
-    localStorage.setItem(STORAGE_KEY, endTime);
+  let startTime = localStorage.getItem(STORAGE_KEY);
+
+  if (!startTime) {
+    startTime = Date.now();
+    localStorage.setItem(STORAGE_KEY, startTime);
   } else {
-    endTime = parseInt(endTime, 10);
+    startTime = parseInt(startTime, 10);
   }
 
   function updateTimer() {
     const now = Date.now();
-    let remaining = Math.floor((endTime - now) / 1000);
+    const elapsed = Math.floor((now - startTime) / 1000);
+    let remaining = TOTAL_TIME - elapsed;
 
-    if (remaining <= 0) {
-      localStorage.removeItem(STORAGE_KEY);
-      values.forEach(v => v.textContent = '00');
-      clearInterval(interval);
-      return;
+    if (remaining >= 0) {
+      const hours = Math.floor(remaining / 3600);
+      const minutes = Math.floor((remaining % 3600) / 60);
+      const seconds = remaining % 60;
+
+      values[0].textContent = String(hours).padStart(2, '0');
+      values[1].textContent = String(minutes).padStart(2, '0');
+      values[2].textContent = String(seconds).padStart(2, '0');
+    } else {
+      const over = Math.abs(remaining);
+      const hours = Math.floor(over / 3600);
+      const minutes = Math.floor((over % 3600) / 60);
+      const seconds = over % 60;
+
+      values[0].textContent = `+${String(hours).padStart(2, '0')}`;
+      values[1].textContent = String(minutes).padStart(2, '0');
+      values[2].textContent = String(seconds).padStart(2, '0');
     }
-
-    const hours = Math.floor(remaining / 3600);
-    const minutes = Math.floor((remaining % 3600) / 60);
-    const seconds = remaining % 60;
-
-    values[0].textContent = String(hours).padStart(2, '0');
-    values[1].textContent = String(minutes).padStart(2, '0');
-    values[2].textContent = String(seconds).padStart(2, '0');
   }
 
   updateTimer();
-  const interval = setInterval(updateTimer, 1000);
+  setInterval(updateTimer, 1000);
 });

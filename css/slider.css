@@ -35,9 +35,17 @@
     box-sizing: border-box;
 }
 
+.slick-track{
+    display: flex !important;
+    align-items: center !important;
+}
+
 .receipts-slider .slider-item img{
     max-height: 220px !important;
     object-fit: contain;
+    width: 230px;
+    margin: auto;
+    border-radius: 15px;
 }
 
 /* Зображення — адаптивне, без трансформів */
